@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Mady</title>
+
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+    <script>
+        function getCSRFToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
+                   document.cookie.split('; ').find(row => row.startsWith('csrftoken='))?.split('=')[1];
+        }
+    </script>
+</head>
+<body>
+    <div class="ask-mady-card">
+        <div class="header">
+            <img src="{% static 'mady-avatar.png' %}" alt="Mady" class="avatar">
+            <h1>Ask Mady</h1>
+        </div>
+        <div class="search-results">
+            <h2>Here’s what I found for you!</h2>
+
+            {% if main_pick %}
+                <!-- ✅ Display Main Top Pick in Orange Box -->
+                <div class="restaurant-card top-pick">
+                    <div class="top-pick-header">
+                        <img src="{% static 'recommended.png' %}" alt="Recommended" class="recommended-icon">
+                        <div class="restaurant-info">
+                            <h3 class="restaurant-name">{{ main_pick.name }}</h3>
+                            {% if main_pick.neighborhood %}
+                                <p class="restaurant-location"><i class="fa-solid fa-map-marker-alt"></i> {{ main_pick.neighborhood }}</p>
+                            {% else %}
+                                <p class="restaurant-location"><i class="fa-solid fa-map-marker-alt"></i> Location not available</p>
+                            {% endif %}
+                                
+                        </div>
+                    </div>
+                    <p class="restaurant-description">{{ main_pick.reason }}</p>
+
+                    <!-- ✅ Links for Instagram, Reservation, and Directions -->
+                    <div class="restaurant-links">
+                        {% if main_pick.instagram %}
+                            <a href="{{ main_pick.instagram }}" target="_blank" class="icon-link"><i class="fab fa-instagram"></i> Instagram</a>
+                        {% endif %}
+                        {% if main_pick.reservation_link %}
+                            <a href="{{ main_pick.reservation_link }}" target="_blank" class="icon-link"><i class="fa-solid fa-calendar-check"></i> Reserve</a>
+                        {% endif %}
+                        {% if main_pick.directions_link %}
+                            <a href="{{ main_pick.directions_link }}" target="_blank" class="icon-link"><i class="fa-solid fa-location-arrow"></i> Directions</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <!-- ❌ No Main Pick Found -->
+                <p class="no-results">⚠️ Oops! I couldn't find an exact match. Try again with different keywords.</p>
+            {% endif %}
+
+            {% if additional_suggestions %}
+                <!-- ✅ Display Additional Suggestions -->
+                <h2 class="additional-title">Other great options:</h2>
+                <div class="additional-suggestions">
+                    {% for restaurant in additional_suggestions %}
+                        <div class="restaurant-card additional-suggestion">
+                            <h3 class="restaurant-name">{{ restaurant.name }}</h3>
+                            <p class="restaurant-location"><i class="fa-solid fa-map-marker-alt"></i> {{ restaurant.neighborhood }}</p>
+                            <p class="restaurant-description">{{ restaurant.reason }}</p>
+
+                            <div class="restaurant-links">
+                                {% if restaurant.instagram %}
+                                    <a href="{{ restaurant.instagram }}" target="_blank" class="icon-link"><i class="fab fa-instagram"></i> Instagram</a>
+                                {% endif %}
+                                {% if restaurant.reservation_link %}
+                                    <a href="{{ restaurant.reservation_link }}" target="_blank" class="icon-link"><i class="fa-solid fa-calendar-check"></i> Reserve</a>
+                                {% endif %}
+                                {% if restaurant.directions_link %}
+                                    <a href="{{ restaurant.directions_link }}" target="_blank" class="icon-link"><i class="fa-solid fa-location-arrow"></i> Directions</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- ✅ Add a button to go back to the search page -->
+            <button class="ask-mady-btn" onclick="window.location.href='/restaurants/'"> Search Again</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("Results page loaded successfully!");
+        });
+    </script>
+
+    <style>
+        .top-pick {
+            border: 2px solid #F58A1F;
+            background: rgba(245, 138, 31, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .recommended-icon {
+            width: 50px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .top-pick-header {
+            display: flex;
+            align-items: center;
+        }
+
+        .restaurant-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .additional-suggestion {
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            margin-top: 5px !important;
+        }
+
+        .no-results {
+            font-size: 16px;
+            font-style: italic;
+            color: #d9534f;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</body>
+</html>

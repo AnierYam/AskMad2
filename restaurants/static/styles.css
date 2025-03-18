@@ -1,0 +1,294 @@
+/* ✅ General Styles */
+
+body {
+    font-family: 'FreeMono', monospace;
+    background-color: #F5F5F5;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: visible;
+}
+
+/* ✅ Card Container */
+.ask-mady-card {
+    background: #F3EBE8;
+    width: 380px;
+    border-radius: 0px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: visible;
+}
+
+/* ✅ Header */
+.header {
+    background-color: #F3EBE8;
+    color: black;
+    display: flex;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 2px;
+    position: relative;
+    outline: black;
+    outline-width: 2px;
+    border-bottom: 2px solid black;
+    height: 20px;
+    margin-bottom: 0px;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    margin-top: 10px;
+    align-content: right;
+    margin-right: 10px;
+    padding-left: 2px;
+    padding-top: 18px;
+}
+
+.header h1 {
+    margin-left: 0px;
+    font-size: 30px;
+    font-weight: bold;
+    padding: 0px;
+    align-self: center;
+}
+
+.watcha-lookin-for {
+    background-color: #CEEADD; /* Change to any color you want */
+    padding: 0.5px; /* Adds spacing inside the section */
+    text-align: center; /* Centers text */
+    margin: 0px; /* Adds space above & below */
+    border-radius: 0px; /* Optional: Adds rounded corners */
+    border-bottom: 2px solid black !important; /* Adds a border at the bottom */
+}
+
+/* ✅ Content */
+.content {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background: #eeb22f;
+    border-bottom: 2px solid black;
+    width: 100%;
+    text-align: center;
+}
+
+.content h2 {
+    text-align: center;
+    font-size: 15px;
+    color: black;
+    font-weight: bold;
+    margin-top: 0px;
+}
+
+.content h3 {
+    text-align: left;
+    font-size: 15px;
+    color: black;
+    margin-top: 0px;
+    margin-bottom: 0px;;
+}
+
+/* ✅ Search Criteria Section */
+.search-criteria {
+    background: #FCF7FB;
+    padding: 15px;
+    border-radius: 0px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+}
+
+.search-criteria .section-title {
+    color: #F58A1F;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.search-criteria p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.example-text {
+    font-size: 12px;
+    font-style: italic;
+    color: black;
+    text-align: center;
+    
+}
+
+/* ✅ Example Query */
+.example-query {
+    color: #388E3C;
+    font-size: 14px;
+    font-style: italic;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* ✅ Button */
+.ask-mady-btn {
+    width: fit-content;
+    background: #CEEADD;
+    border: 2px solid black !important;
+    color: black;
+    border: none;
+    padding: 12px 20px;;
+    border-radius: 0px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto; /* Centers the button */
+    margin-bottom: 20px;
+    
+}
+
+.ask-mady-btn:hover {
+    background: #388E3C;
+}
+
+.search-results {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background: #eeb22f;
+    border-bottom: 2px solid black;
+    width: auto;
+    text-align: left;
+}
+
+.search-results h2 {
+    text-align: center;
+    font-size: 15px;
+    color: black;
+    font-weight: bold;
+    margin-top: 0px;
+}
+/* ✅ Restaurant Cards */
+.restaurant-card {
+    background: white;
+    padding: 5px;
+    border-radius: 0px;
+    margin-bottom: 15px;
+    margin-top: 5px;
+    padding-top: 1px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+/* ✅ Top Pick Card */
+.restaurant-card.top-pick {
+    border: 2px solid #CEEADD;
+    background: #CEEADD;
+    position: static;
+    padding-top: 10px;
+    outline: black;
+    min-width: auto;
+    flex-grow: 1
+}
+
+/* ✅ Additional Suggestions */
+.additional-suggestion {
+    background: white;
+    border-radius: 0px;
+    padding: 15px;
+    margin-bottom: 0px;
+}
+
+/* ✅ Recommended Badge */
+.recommended-icon {
+    width: 80px;
+    height: auto;
+    margin-right: 10px;
+}
+
+/* ✅ Restaurant Name & Location Styling */
+.restaurant-name {
+    font-size: 15px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 2px;
+    margin-top: 2px;
+}
+
+.restaurant-location {
+    font-size: 14px;
+    font-style: italic;
+    color: #666;
+    margin-top: -1px;
+    margin-bottom: 3px;
+    text-align: left;
+}
+
+/* ✅ Restaurant Description */
+.restaurant-description {
+    font-size: 13px;
+    font-style: italic;
+    color: #444;
+    margin-top: 8px;
+    text-align: left;
+}
+
+/* ✅ Restaurant Links */
+.restaurant-links {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 8px;
+}
+
+/* ✅ Link Styling */
+.icon-link {
+    text-decoration: none;
+    font-size: 14px;
+    color: #1D342B;
+    font-weight: bold;
+}
+
+.icon-link i {
+    margin-right: 5px;
+}
+
+.icon-link:hover {
+    color: #F58A1F;
+}
+
+/* ✅ Loading Overlay */
+#loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    flex-direction: column;
+}
+
+/* ✅ Spinner */
+.spinner img {
+    width: 80px;
+    height: 80px;
+    animation: spin 2.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ✅ Fade-in and fade-out effect */
+@keyframes fade-in-out {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+

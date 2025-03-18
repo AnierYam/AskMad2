@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Mady</title>
+
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+    <!-- CSRF Token (for safe Django requests) -->
+    <script>
+        function getCSRFToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
+                   document.cookie.split('; ').find(row => row.startsWith('csrftoken='))?.split('=')[1];
+        }
+    </script>
+</head>
+<body>
+    <div class="ask-mady-card">
+        <div class="header">
+            <img src="{% static 'mady-avatar.png' %}" alt="Mady" class="avatar">
+            <h1>Ask Mady</h1>
+        </div>
+        <div class="watcha-lookin-for">
+            <p class="h2"><strong>What are you looking for?</strong></p>
+        </div>
+        <div class="content">
+                <p class="h3"><strong>Neighborhood/Area?</strong><br> <span class="example-text"> (e.g., Venice, Hollywood)</span></p>
+                <p class="h3"><strong>Cuisine?</strong><br><span class="example-text"> (e.g., Italian, Asian, coffee)</span></p>
+                <p class="h3"><strong>Opening Hours?</strong><br><span class="example-text"> (e.g., open late, open Mondays)</span></p>
+                <p class="h3"><strong>Vibe?</strong><br><span class="example-text"> (e.g., cozy, trendy, romantic)</span></p>
+                <p class="h3"><strong>Occasion?</strong><br><span class="example-text"> (e.g., date, business lunch)</span></p>
+                <p class="h3"><strong>Meal Type?</strong><br><span class="example-text"> (e.g., brunch, dinner, dessert)</span></p>
+                <p class="h3"><strong>Dietary Needs?</strong><br><span class="example-text"> (e.g., vegetarian, gluten-free)</span></p>
+            </div>
+            <p class="example-query"><strong>Example: Cozy Italian spot in Echo Park, open late, good for a date, with vegetarian options!</span></em></p>
+            
+            <!-- Display voice input result -->
+            <p id="voice-input-display" class="example-query"></p>
+
+            <!-- Button to start voice recognition -->
+            <button class="ask-mady-btn" id="start-voice-btn">
+                Ask Mady    
+                <i class="fa-solid fa-microphone"></i> 
+            </button>
+
+            <!-- CSRF token (Hidden input for Django security) -->
+            <form id="csrf-form">
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
+
+    <!-- ✅ Loading Overlay (Initially Hidden) -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner">
+                <img id="loading-icon" src="{% static 'Search.png' %}" alt="Loading">
+            </div>
+            <p>Mady is thinking...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("JavaScript loaded successfully!");
+
+            const askMadyButton = document.getElementById("start-voice-btn");
+            const voiceInputDisplay = document.getElementById("voice-input-display");
+            const loadingOverlay = document.getElementById("loading-overlay");
+            const loadingIcon = document.getElementById("loading-icon");
+
+            // Food icons to cycle through
+            const foodIcons = [
+                "{% static 'Pizza.png' %}",
+                "{% static 'Drinks.png' %}",
+                "{% static 'Dessert.png' %}",
+                "{% static 'Coffee.png' %}",
+                "{% static 'Search.png' %}"
+            ];
+
+            let iconIndex = 0;
+
+            function cycleIcons() {
+                iconIndex = (iconIndex + 1) % foodIcons.length;
+                loadingIcon.src = foodIcons[iconIndex];
+            }
+
+            // Define Speech Recognition
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                console.error("Speech Recognition is NOT supported in this browser.");
+                voiceInputDisplay.textContent = "Speech recognition is not supported in your browser.";
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = "en-US";
+            recognition.interimResults = false;
+
+            askMadyButton.addEventListener("click", function () {
+                console.log("Voice recognition started...");
+                voiceInputDisplay.textContent = "Listening... 🎙️";
+                recognition.start();
+            });
+
+            recognition.onresult = function (event) {
+                const transcript = event.results[0][0].transcript;
+                console.log("User said:", transcript);
+                voiceInputDisplay.textContent = `You said: "${transcript}"`;
+
+                // ✅ Show overlay BEFORE sending request
+                loadingOverlay.style.display = "flex";
+                cycleIcons();
+                const iconInterval = setInterval(cycleIcons, 800);
+
+                fetch('/restaurants/process-voice/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken(),
+                    },
+                    body: JSON.stringify({ query: transcript }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    clearInterval(iconInterval);
+                    loadingOverlay.style.display = "none"; // ✅ Hide overlay when results are ready
+
+                    if (data.success) {
+                        window.location.href = "/restaurants/results/";
+                    } else {
+                        voiceInputDisplay.textContent = "No matching restaurants found.";
+                    }
+                })
+                .catch(error => {
+                    clearInterval(iconInterval);
+                    loadingOverlay.style.display = "none"; // ✅ Hide overlay if error occurs
+                    console.error("Error:", error);
+                    voiceInputDisplay.textContent = "Error processing request.";
+                });
+            };
+
+            recognition.onerror = function () {
+                voiceInputDisplay.textContent = "Error capturing voice. Try again.";
+            };
+        });
+    </script>
+
+    <style>
+        /* ✅ Loading Overlay Styles */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .spinner img {
+            width: 80px;
+            height: 80px;
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-content p {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 15px;
+        }
+    </style>
+</body>
+</html>
