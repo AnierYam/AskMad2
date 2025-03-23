@@ -11,7 +11,7 @@ from .models import Restaurant
 
 # Load environment variables from .env
 load_dotenv()
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="x")
 
 ### ✅ Helper: Fetch All Restaurants (NO FILTERING)
 def get_all_restaurants():
